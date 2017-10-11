@@ -87,7 +87,7 @@ class ArticleController extends Controller
         $id = $request->get('id');
         $article = $em->getRepository(Article::class)->find($id);
 
-        if($article) {
+        if ($article) {
             $updateForm = $this->createForm(ArticleType::class, $article);
             $updateForm->handleRequest($request);
 
@@ -117,7 +117,7 @@ class ArticleController extends Controller
         $em = $this->getDoctrine()->getManager();
         $article = $em->getRepository(Article::class)->find($id);
 
-        if($article) {
+        if ($article) {
             $em->remove($article);
             $em->flush();
         }
