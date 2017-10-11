@@ -1,0 +1,11 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+
+    <h2>Update article #{{ article.id }}</h2>
+
+    {{ form(edit_form) }}
+
+    <a href="{{ path("article_homepage") }}" class="alert-link">Back to the articles list</a>
+
+{% endblock %}

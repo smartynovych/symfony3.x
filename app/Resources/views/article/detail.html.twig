@@ -1,0 +1,13 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+
+    <h2>{{ article.name }}</h2>
+
+    <span>{{ article.createdAt|date("m/d/Y H:i") }}</span>
+
+    <p class="text-md-left">{{ article.description }}</p>
+
+    <a href="{{ path("article_homepage") }}" class="alert-link">Back to the articles list</a>
+
+{% endblock %}

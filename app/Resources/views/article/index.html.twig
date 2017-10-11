@@ -1,0 +1,32 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <table class="table table-striped">
+        <thead>
+        <tr>
+            <th>ID</th>
+            <th>Name</th>
+            <th>Description</th>
+            <th>Date</th>
+            <th>Operation</th>
+        </tr>
+        </thead>
+        <tbody>
+    {% for article in articles %}
+        <tr>
+            <td>{{ article.id }}</td>
+            <td>{{ article.name }}</td>
+            <td>{{ article.description|slice(0,50)|trim() }}{% if article.description|length > 50 %}...{% endif %}
+            </td>
+            <td>{{ article.createdAt|date("m/d/Y H:i") }}</td>
+            <td>
+                <a href="{{ path("article_detail", { 'id': article.id }) }}">Detail</a>
+                | <a href="{{ path("article_update", { 'id': article.id }) }}">Update</a>
+                | <a href="{{ path("article_delete", { 'id': article.id }) }}">Delete</a>
+            </td>
+        </tr>
+    {% endfor %}
+        </tbody>
+    </table>
+    <a href="{{ path("article_create") }}" class="btn btn-primary">Create new article</a>
+{% endblock %}
