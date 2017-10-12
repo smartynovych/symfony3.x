@@ -1,4 +1,5 @@
 <?php
+declare(strict_types = 1);
 
 namespace AppBundle\Entity;
 
@@ -32,25 +33,25 @@ class Article
     private $createdAt;
 
     /**
-     * @return mixed
+     * @return int
      */
-    public function getId()
+    public function getId(): int
     {
-        return $this->id;
+        return (int) $this->id;
     }
 
     /**
      * @return mixed
      */
-    public function getName()
+    public function getName(): string
     {
-        return $this->name;
+        return (string) $this->name;
     }
 
     /**
      * @param mixed $name
      */
-    public function setName($name)
+    public function setName(string $name)
     {
         $this->name = $name;
     }
@@ -58,31 +59,35 @@ class Article
     /**
      * @return mixed
      */
-    public function getDescription()
+    public function getDescription(): string
     {
-        return $this->description;
+        return (string) $this->description;
     }
 
     /**
      * @param mixed $description
      */
-    public function setDescription($description)
+    public function setDescription(string $description)
     {
         $this->description = $description;
     }
 
     /**
-     * @return mixed
+     * @return \DateTime
      */
-    public function getCreatedAt()
+    public function getCreatedAt(): \DateTime
     {
+        if (!$this->createdAt instanceof \DateTime) {
+            $this->createdAt = new \DateTime;
+        }
+
         return $this->createdAt;
     }
 
     /**
-     * @param mixed $createdAt
+     * @param \DateTime $createdAt
      */
-    public function setCreatedAt($createdAt)
+    public function setCreatedAt(\DateTime $createdAt)
     {
         $this->createdAt = $createdAt;
     }
