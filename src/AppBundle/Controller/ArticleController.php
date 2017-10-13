@@ -42,7 +42,10 @@ class ArticleController extends Controller
         $em = $this->getDoctrine()->getManager();
         $article = $em->getRepository(Article::class)->find($id);
 
-        // replace this example code with whatever you need
+        if (!$article) {
+            throw $this->createNotFoundException('The article does not exist');
+        }
+
         return $this->render('article/detail.html.twig', [
             'article' => $article,
         ]);
@@ -116,6 +119,10 @@ class ArticleController extends Controller
     {
         $em = $this->getDoctrine()->getManager();
         $article = $em->getRepository(Article::class)->find($id);
+
+        if (!$article) {
+            throw $this->createNotFoundException('The article does not exist');
+        }
 
         if ($article) {
             $em->remove($article);
