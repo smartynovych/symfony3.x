@@ -1,5 +1,6 @@
 {
     "name": "smarty/symfony3",
+    "description": "Symfony3 Framework.",
     "license": "proprietary",
     "type": "project",
     "autoload": {
