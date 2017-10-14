@@ -7,25 +7,17 @@
         <link rel="icon" type="image/x-icon" href="{{ asset('favicon.ico') }}" />
     </head>
     <body>
+    {% include 'header.html.twig' %}
+    <main>
     <div class="container">
         <div class="row">
             <div class="col">
-                <div class="alert alert-light">
-                   <h1>PHP School tasks</h1>
-                </div>
-            </div>
-            <div class="col">
-                <div class="alert alert-light">
-                    <p class="text-md-right"> <a href="{{ path("homepage") }}">Home</a></p>
-                </div>
-            </div>
-        </div>
-        <div class="row">
-            <div class="col">
         {% block body %}{% endblock %}
-        {% block javascripts %}{% endblock %}
             </div>
         </div>
     </div>
+    </main>
+    {% include 'footer.html.twig' %}
+    {% block javascripts %}{% endblock %}
     </body>
 </html>
