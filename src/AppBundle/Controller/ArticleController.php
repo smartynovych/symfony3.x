@@ -7,6 +7,7 @@ use AppBundle\Form\ArticleType;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
+use Doctrine\ORM\Tools\Pagination\Paginator;
 
 /**
  * Class ArticleController
@@ -14,20 +15,28 @@ use Symfony\Component\HttpFoundation\Request;
  */
 class ArticleController extends Controller
 {
+
     /**
      * @Route("/article/", name="article_homepage")
      *
+     * @param Request $request
+     *
      * @return string|\Symfony\Component\HttpFoundation\Response
      */
-    public function indexAction()
+    public function indexAction(Request $request)
     {
-        $em = $this->getDoctrine()->getManager();
-        $articles = $em->getRepository(Article::class)->findAll();
+        $em = $this->get('doctrine.orm.entity_manager');
+        $dql = "SELECT a FROM AppBundle:Article a";
+        $query = $em->createQuery($dql);
 
-        // replace this example code with whatever you need
-        return $this->render('article/index.html.twig', [
-            'articles' => $articles,
-        ]);
+        $paginator  = $this->get('knp_paginator');
+        $pagination = $paginator->paginate(
+            $query,
+            $request->query->getInt('page', 1),
+            5
+        );
+
+        return $this->render('article/index.html.twig', array('pagination' => $pagination, 'direction' => $request->get('direction'), 'sort' => $request->get('sort')));
     }
 
     /**

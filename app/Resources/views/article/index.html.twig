@@ -1,32 +1,53 @@
 {% extends 'bootstrap.html.twig' %}
 
 {% block body %}
+
     <table class="table table-striped">
         <thead>
         <tr>
-            <th>ID</th>
-            <th>Name</th>
+            <th{% if pagination.isSorted('a.id') %} class="table-active"{% endif %}>{{ knp_pagination_sortable(pagination, 'ID', 'a.id') }} <i class="fa fa-fw fa-sort{% if pagination.isSorted('a.id') %}{% if direction == 'asc' %}-asc{% else %}-desc{% endif %}{% endif %}"></i></th>
+            <th>{{ knp_pagination_sortable(pagination, 'Name', 'a.name') }} <i class="fa fa-fw fa-sort{% if pagination.isSorted('a.name') %}{% if direction == 'asc' %}-asc{% else %}-desc{% endif %}{% endif %}"></i></th>
             <th>Description</th>
-            <th>Date</th>
+            <th>{{ knp_pagination_sortable(pagination, 'Date Create', ['a.createdAt']) }} <i class="fa fa-fw fa-sort{% if pagination.isSorted('a.createdAt') %}{% if direction == 'asc' %}-asc{% else %}-desc{% endif %}{% endif %}"></i></th>
             <th>Operation</th>
         </tr>
         </thead>
         <tbody>
-    {% for article in articles %}
-        <tr>
-            <td>{{ article.id }}</td>
-            <td>{{ article.name }}</td>
-            <td>{{ article.description|slice(0,50)|trim() }}{% if article.description|length > 50 %}...{% endif %}
-            </td>
-            <td>{{ article.createdAt|date("m/d/Y H:i") }}</td>
-            <td>
-                <a href="{{ path("article_detail", { 'id': article.id }) }}">Detail</a>
-                | <a href="{{ path("article_update", { 'id': article.id }) }}">Update</a>
-                | <a href="{{ path("article_delete", { 'id': article.id }) }}">Delete</a>
-            </td>
-        </tr>
-    {% endfor %}
+        {% for article in pagination %}
+            <tr>
+                <td{% if pagination.isSorted('a.id') %} class="table-active"{% endif %}>{{ article.id }}</td>
+                <td{% if pagination.isSorted('a.name') %} class="table-active"{% endif %}>{{ article.name }}</td>
+                <td>{{ article.description|slice(0,50)|trim() }}{% if article.description|length > 50 %}...{% endif %}
+                </td>
+                <td{% if pagination.isSorted('a.createdAt') %} class="table-active"{% endif %}>{{ article.createdAt|date("m/d/Y H:i") }}</td>
+                <td>
+                    <a href="{{ path("article_detail", { 'id': article.id }) }}">Detail</a>
+                    | <a href="{{ path("article_update", { 'id': article.id }) }}">Update</a>
+                    | <a href="{{ path("article_delete", { 'id': article.id }) }}">Delete</a>
+                </td>
+            </tr>
+        {% endfor %}
         </tbody>
     </table>
+
+
+    {# total items count #}
+    <div class="row">
+        <div class="col">
+            {# display navigation #}
+            <div class="navigation">
+                {{ knp_pagination_render(pagination) }}
+            </div>
+        </div>
+            <div class="col">
+            <div class="count">
+                <div class="text-right">
+                Total Articles: {{ pagination.getTotalItemCount }}
+                </div>
+            </div>
+         </div>
+    </div>
+
     <a href="{{ path("article_create") }}" class="btn btn-primary">Create new article</a>
+
 {% endblock %}
