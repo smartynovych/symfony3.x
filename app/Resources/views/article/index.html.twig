@@ -6,7 +6,9 @@
             <a href="{{ path("article_create") }}" class="btn btn-primary">Create new article</a>
         </div>
         <div class="col text-right">
-            Filter: <input name="filer" placeholder="Just fake field">
+            <form method="get" action="">
+            Filter: <input type="text" name="filter" value="">
+            </form>
         </div>
     </div>
 
