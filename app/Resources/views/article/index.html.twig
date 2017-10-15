@@ -1,29 +1,40 @@
 {% extends 'bootstrap.html.twig' %}
 
 {% block body %}
+    <div class="row">
+        <div class="col">
+            <a href="{{ path("article_create") }}" class="btn btn-primary">Create new article</a>
+        </div>
+        <div class="col text-right">
+            Filter: <input name="filer" placeholder="Just fake field">
+        </div>
+    </div>
+
+    <br>
 
     <table class="table table-striped">
         <thead>
         <tr>
             <th{% if pagination.isSorted('a.id') %} class="table-active"{% endif %}>{{ knp_pagination_sortable(pagination, 'ID', 'a.id') }} <i class="fa fa-fw fa-sort{% if pagination.isSorted('a.id') %}{% if direction == 'asc' %}-asc{% else %}-desc{% endif %}{% endif %}"></i></th>
-            <th>{{ knp_pagination_sortable(pagination, 'Name', 'a.name') }} <i class="fa fa-fw fa-sort{% if pagination.isSorted('a.name') %}{% if direction == 'asc' %}-asc{% else %}-desc{% endif %}{% endif %}"></i></th>
-            <th>Description</th>
             <th>{{ knp_pagination_sortable(pagination, 'Date Create', ['a.createdAt']) }} <i class="fa fa-fw fa-sort{% if pagination.isSorted('a.createdAt') %}{% if direction == 'asc' %}-asc{% else %}-desc{% endif %}{% endif %}"></i></th>
-            <th>Operation</th>
+            <th>{{ knp_pagination_sortable(pagination, 'Name', 'a.name') }} <i class="fa fa-fw fa-sort{% if pagination.isSorted('a.name') %}{% if direction == 'asc' %}-asc{% else %}-desc{% endif %}{% endif %}"></i></th>
+            <th>
+                <div class="text-center">Operation</div>
+            </th>
         </tr>
         </thead>
         <tbody>
         {% for article in pagination %}
-            <tr>
+            <tr scope="row">
                 <td{% if pagination.isSorted('a.id') %} class="table-active"{% endif %}>{{ article.id }}</td>
-                <td{% if pagination.isSorted('a.name') %} class="table-active"{% endif %}>{{ article.name }}</td>
-                <td>{{ article.description|slice(0,50)|trim() }}{% if article.description|length > 50 %}...{% endif %}
-                </td>
                 <td{% if pagination.isSorted('a.createdAt') %} class="table-active"{% endif %}>{{ article.createdAt|date("m/d/Y H:i") }}</td>
+                <td{% if pagination.isSorted('a.name') %} class="table-active"{% endif %} title="{{ article.description|slice(0,50)|trim() }}{% if article.description|length > 50 %}...{% endif %}" width="auto">{{ article.name }}</td>
                 <td>
-                    <a href="{{ path("article_detail", { 'id': article.id }) }}">Detail</a>
-                    | <a href="{{ path("article_update", { 'id': article.id }) }}">Update</a>
-                    | <a href="{{ path("article_delete", { 'id': article.id }) }}">Delete</a>
+                    <div class="text-right">
+                        <a href="{{ path("article_detail", { 'id': article.id }) }}" class="btn btn-success">Detail</a>
+                        <a href="{{ path("article_update", { 'id': article.id }) }}" class="btn btn-info">Update</a>
+                        <a href="{{ path("article_delete", { 'id': article.id }) }}" class="btn btn-danger">Delete</a>
+                    </div>
                 </td>
             </tr>
         {% endfor %}
@@ -39,15 +50,13 @@
                 {{ knp_pagination_render(pagination) }}
             </div>
         </div>
-            <div class="col">
-            <div class="count">
-                <div class="text-right">
-                Total Articles: {{ pagination.getTotalItemCount }}
-                </div>
+        <div class="col">
+        <div class="count">
+            <div class="text-right">
+            Total Articles: {{ pagination.getTotalItemCount }}
             </div>
-         </div>
+        </div>
+     </div>
     </div>
-
-    <a href="{{ path("article_create") }}" class="btn btn-primary">Create new article</a>
 
 {% endblock %}
