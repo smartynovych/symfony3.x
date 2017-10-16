@@ -19,9 +19,14 @@ class Article
     private $id;
 
     /**
-     * @ORM\Column(type="integer")
+     * @ORM\Column(type="integer", name="category_id")
      */
-    private $categoryId;
+    private $categoryId = 1;
+
+    /**
+     * @ORM\Column(type="string", length=2, name="language_id", options={"default" : "ru"})
+     */
+    private $languageId = 'ru';
 
     /**
      * @ORM\Column(type="string", length=100)
@@ -36,12 +41,12 @@ class Article
     /**
      * @ORM\Column(type="string", length=1, name="is_active", options={"default" : "Y"})
      */
-    private $isActive;
+    private $isActive = 'Y';
 
     /**
      * @ORM\Column(type="integer", name="created_by", options={"default" : 0})
      */
-    private $createdBy;
+    private $createdBy = 1;
 
     /**
      * @ORM\Column(type="datetime", name="created_at")
@@ -77,6 +82,25 @@ class Article
     {
         $this->categoryId = $categoryId;
 
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getLanguageId(): string
+    {
+        return (string) $this->languageId;
+    }
+
+    /**
+     * @param string $languageId
+     *
+     * @return Article
+     */
+    public function setLanguageId(string $languageId): Article
+    {
+        $this->languageId = $languageId;
         return $this;
     }
 
