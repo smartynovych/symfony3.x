@@ -74,6 +74,8 @@ class ArticleController extends Controller
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+            $article->setCategoryId(1)->setIsActive("Y")->setCreatedBy(1);
+
             $em = $this->getDoctrine()->getManager();
             $em->persist($article);
             $em->flush();

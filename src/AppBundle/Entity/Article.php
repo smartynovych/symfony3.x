@@ -19,6 +19,11 @@ class Article
     private $id;
 
     /**
+     * @ORM\Column(type="integer")
+     */
+    private $categoryId;
+
+    /**
      * @ORM\Column(type="string", length=100)
      */
     private $name;
@@ -29,7 +34,17 @@ class Article
     private $description;
 
     /**
-     * @ORM\Column(type="datetime")
+     * @ORM\Column(type="string", length=1, name="is_active", options={"default" : "Y"})
+     */
+    private $isActive;
+
+    /**
+     * @ORM\Column(type="integer", name="created_by", options={"default" : 0})
+     */
+    private $createdBy;
+
+    /**
+     * @ORM\Column(type="datetime", name="created_at")
      */
     private $createdAt;
 
@@ -39,6 +54,30 @@ class Article
     public function getId(): int
     {
         return (int) $this->id;
+    }
+
+    /**
+     * Get categoryId
+     *
+     * @return integer
+     */
+    public function getCategoryId(): int
+    {
+        return (int) $this->categoryId;
+    }
+
+    /**
+     * Set categoryId
+     *
+     * @param integer $categoryId
+     *
+     * @return Article
+     */
+    public function setCategoryId(int $categoryId): Article
+    {
+        $this->categoryId = $categoryId;
+
+        return $this;
     }
 
     /**
@@ -76,6 +115,54 @@ class Article
     public function setDescription(string $description): Article
     {
         $this->description = $description;
+        return $this;
+    }
+
+    /**
+     * Get isActive
+     *
+     * @return string
+     */
+    public function getIsActive(): string
+    {
+        return $this->isActive;
+    }
+
+    /**
+     * Set isActive
+     *
+     * @param string $isActive
+     *
+     * @return Article
+     */
+    public function setIsActive(string $isActive): Article
+    {
+        $this->isActive = $isActive;
+
+        return $this;
+    }
+
+    /**
+     * Get createdBy
+     *
+     * @return integer
+     */
+    public function getCreatedBy(): int
+    {
+        return (int) $this->createdBy;
+    }
+
+    /**
+     * Set createdBy
+     *
+     * @param integer $createdBy
+     *
+     * @return Article
+     */
+    public function setCreatedBy(int $createdBy): Article
+    {
+        $this->createdBy = $createdBy;
+
         return $this;
     }
 
