@@ -4,7 +4,7 @@
 parameters:
     database_host: 127.0.0.1
     database_port: ~
-    database_name: myapp_test
+    database_name: myapp
     database_user: travis
     database_password: ~
     # You should uncomment this if you want to use pdo_sqlite
