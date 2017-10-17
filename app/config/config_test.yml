@@ -1,3 +1,5 @@
+
+
 imports:
     - { resource: config_dev.yml }
 
@@ -17,7 +19,8 @@ swiftmailer:
 
 doctrine:
     dbal:
-        host:     localhost
-        dbname:   myapp_test
-        user:     travis
-        password: Travis123!
+        host:     '%database_host%'
+        port:     '%database_port%'
+        dbname:   "%database_name%_%kernel.environment%"
+        user:     '%database_user%'
+        password: '%database_password%'
