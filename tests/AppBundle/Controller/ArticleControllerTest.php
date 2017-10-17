@@ -44,16 +44,18 @@ class ArticleControllerTest extends WebTestCase
             'article' => array(
                 'name' => $faker->name,
                 'description' => $faker->text,
-                'createdAt' => array (
-                    'date' => (array(
-                        'month' => mt_rand(1,12),
-                        'day' => mt_rand(1,28),
-                        'year' => mt_rand(2012,2017),
+                'createdAt' => array(
+                    'date' => (
+                        array(
+                        'month' => mt_rand(1, 12),
+                        'day' => mt_rand(1, 28),
+                        'year' => mt_rand(2012, 2017),
                         )
                     ),
-                    'time' => (array(
-                        'hour' => mt_rand(1,12),
-                        'minute' => mt_rand(1,60),
+                    'time' => (
+                        array(
+                        'hour' => mt_rand(1, 12),
+                        'minute' => mt_rand(1, 60),
                     )
                 )),
                 '_token' => $token[0],
@@ -77,7 +79,7 @@ class ArticleControllerTest extends WebTestCase
         $articles = $this->em->getRepository(Article::class)->findAll();
         $article = array_pop($articles);
 
-        if($article) {
+        if ($article) {
             $client = static::createClient();
 
             $client->request('GET', '/article/detail/'.$article->getId());
@@ -93,7 +95,7 @@ class ArticleControllerTest extends WebTestCase
         $articles = $this->em->getRepository(Article::class)->findAll();
         $article = array_pop($articles);
 
-        if($article) {
+        if ($article) {
             $client = static::createClient();
 
             $crawler = $client->request('GET', '/article/update/'.$article->getId());
@@ -111,16 +113,18 @@ class ArticleControllerTest extends WebTestCase
                 'article' => array(
                     'name' => 'UPDATE #'.$article->getId(). ': '.$faker->name,
                     'description' => 'UPDATE '.$faker->text,
-                    'createdAt' => array (
-                        'date' => (array(
-                            'month' => mt_rand(1,12),
-                            'day' => mt_rand(1,28),
-                            'year' => mt_rand(2012,2017),
+                    'createdAt' => array(
+                        'date' => (
+                            array(
+                            'month' => mt_rand(1, 12),
+                            'day' => mt_rand(1, 28),
+                            'year' => mt_rand(2012, 2017),
                         )
                         ),
-                        'time' => (array(
-                            'hour' => mt_rand(1,12),
-                            'minute' => mt_rand(1,60),
+                        'time' => (
+                            array(
+                            'hour' => mt_rand(1, 12),
+                            'minute' => mt_rand(1, 60),
                         )
                         )),
                     '_token' => $token[0],
@@ -134,7 +138,6 @@ class ArticleControllerTest extends WebTestCase
                 0,
                 $crawler->filter('html:contains("Redirect")')->count()
             );
-
         } else {
             $this->assertTrue($article, 'No article found');
         }
@@ -145,7 +148,7 @@ class ArticleControllerTest extends WebTestCase
         $articles = $this->em->getRepository(Article::class)->findAll();
         $article = array_pop($articles);
 
-        if($article) {
+        if ($article) {
             $client = static::createClient();
 
             $client->request('GET', '/article/delete/'.$article->getId());
