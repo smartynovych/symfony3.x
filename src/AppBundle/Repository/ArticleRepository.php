@@ -8,7 +8,7 @@ use Doctrine\ORM\EntityRepository;
 
 class ArticleRepository extends EntityRepository
 {
-    public function queryBuilder()
+    public function findAllArticle()
     {
         return $this->_em->getRepository('AppBundle:Article')->createQueryBuilder('a');
     }

@@ -23,7 +23,7 @@ class ArticleController extends Controller
      */
     public function indexAction(Request $request)
     {
-        $queryBuilder = $this->getDoctrine()->getRepository(Article::class)->queryBuilder();
+        $queryBuilder = $this->getDoctrine()->getRepository(Article::class)->findAllArticle();
 
         if ($request->query->getAlnum('filter')) {
             $queryBuilder->where('a.name LIKE :name')
