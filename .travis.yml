@@ -10,6 +10,7 @@ before_install:
 # - mysql -e 'CREATE DATABASE IF NOT EXISTS myapp_test;'
 
 before_script:
+  - echo "USE mysql;\nUPDATE user SET password=PASSWORD('Travis123!') WHERE user='travis';\nFLUSH PRIVILEGES;\n" | mysql -u travis
     #- psql -c 'create database travis_ci_test;' -U postgres
   - COMPOSER_ROOT_VERSION=dev-master composer --prefer-source --dev install
 #  - bin/console doctrine:database:drop --force
@@ -21,6 +22,7 @@ test:
   adapter: mysql2
   database: myapp_test
   username: travis
+  password: Travis123!
   encoding: utf8
 
 script: vendor/bin/phpunit
