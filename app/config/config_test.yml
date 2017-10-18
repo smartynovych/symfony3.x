@@ -21,6 +21,6 @@ doctrine:
     dbal:
         host:     '%database_host%'
         port:     '%database_port%'
-        dbname:   "%database_name%_%kernel.environment%"
-        user:     '%database_user%'
-        password: '%database_password%'
+        dbname:   "%test_database_name%"
+        user:     '%test_database_user%'
+        password: '%test_database_password%'

@@ -57,6 +57,16 @@ class ArticleTest extends TestCase
     }
 
     /**
+     * Try to set and get createdBy
+     */
+    public function testCreatedBy()
+    {
+        $this->article->setCreatedBy(1);
+
+        $this->assertEquals(1, $this->article->getCreatedBy());
+    }
+
+    /**
      * Try to set and get categoryId
      */
     public function testCategoryId()

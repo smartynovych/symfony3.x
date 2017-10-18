@@ -14,14 +14,14 @@ before_script:
     #- psql -c 'create database travis_ci_test;' -U postgres
   - COMPOSER_ROOT_VERSION=dev-master composer --prefer-source --dev install
   #- bin/console doctrine:database:drop --force
-  - echo "CREATE DATABASE myapp_test CHARSET utf8;\n" | mysql -u travis
-  #- bin/console doctrine:database:create
+  #- echo "CREATE DATABASE myapp_test CHARSET utf8;\n" | mysql -u travis
+  - bin/console doctrine:database:create
   - bin/console doctrine:schema:update --force
   #- bin/console doctrine:fixtures:load -q
 
 test:
   adapter: mysql2
-  database: myapp_test
+  database: symfony_test
   username: travis
   password: ~
   encoding: utf8
