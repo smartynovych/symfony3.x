@@ -2,19 +2,17 @@
 
 namespace MsgParserBundle\Command;
 
-use Symfony\Component\Console\Command\Command;
+use MsgParserBundle\Entity\MsgParserClasses;
+use MsgParserBundle\Entity\MsgParserInterfaces;
+use MsgParserBundle\Entity\MsgParserNamespace;
+use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\DomCrawler\Crawler;
 
-class ParseCreateCommand extends Command
+class ParseCreateCommand extends ContainerAwareCommand
 {
-    /*
-     * Symfony API branch version
-     */
-    const SYMFONY_BRANCH = 3.3;
-
     protected function configure()
     {
         $this
@@ -38,21 +36,79 @@ class ParseCreateCommand extends Command
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $url = "http://api.symfony.com/master/index.html";
-        $arAllowBranch = array(2.7, 2.8, 3.2, 3.3, 3.4);
+        $branch = 'master';
+        $allowBranchList = array(2.7, 2.8, 3.2, 3.3, 3.4);
+        $arrCount = array(
+            'namespace' => 0,
+            'classes' => 0,
+            'interfaces' => 0,
+            'deprecated' => 0,
+        );
 
-        if (in_array(sprintf('%.1f', $input->getArgument('branch')), $arAllowBranch)) {
-            $url = sprintf("http://api.symfony.com/%.1f/index.html", $input->getArgument('branch'));
+        if (in_array(sprintf('%.1f', $input->getArgument('branch')), $allowBranchList)) {
+            $branch = sprintf('%.1f', $input->getArgument('branch'));
         }
+
+        $url = sprintf("http://api.symfony.com/%s/", $branch);
 
         $html = file_get_contents($url);
+
         $crawler = new Crawler($html);
 
-        $output->writeln('Source parse: '.$url);
-        $output->writeln('NameSpace List: ');
+        $output->writeln('Source url: '.$url);
+
+        $em = $this->getContainer()->get('doctrine')->getManager();
 
         foreach ($crawler->filter('div.namespace-container > ul > li > a') as $item) {
-            $output->writeln('NameSpace Path:    '.$item->getAttribute('href'));
+            $namespace = new MsgParserNamespace();
+
+            $namespace->setName($item->textContent);
+            $namespace->setPath($item->getAttribute('href'));
+            $namespace->setVersion($branch);
+            $namespace->setCreatedAt(new \DateTime());
+            $namespace->setUpdatedAt(new \DateTime());
+
+            $em->persist($namespace);
+            $em->flush();
+            $arrCount['namespace'] ++;
+
+            $htmlNamespace = file_get_contents($url.$item->getAttribute('href'));
+
+            $crawlerNamespace = new Crawler($htmlNamespace);
+
+            foreach ($crawlerNamespace->filterXPath('//div[@class="container-fluid underlined"]/div[@class="row"]/div[1]') as $classItem) {
+                foreach ($classItem->childNodes as $child) {
+                    if ($child->nodeName == 'a') {
+                        $className = new MsgParserClasses();
+                        $arrCount['classes'] ++;
+                    } elseif ($child->nodeName == 'em') {
+                        $className = new MsgParserInterfaces();
+                        $arrCount['interfaces'] ++;
+                    } else {
+                        continue;
+                    }
+
+                    $className->setNamespaceId($namespace->getId());
+                    $className->setName(trim($child->textContent));
+                    $className->setDescription(ltrim(trim(str_replace($className->getName(), '', $child->parentNode->parentNode->textContent)), '.'));
+
+                    if (strstr($child->parentNode->textContent, 'deprecated')) {
+                        $className->setDescription(trim(str_replace('deprecated', '', $className->getDescription())));
+                        $className->setIsDeprecated('Y');
+                        $arrCount['deprecated'] ++;
+                    }
+
+                    $className->setCreatedAt(new \DateTime());
+                    $className->setUpdatedAt(new \DateTime());
+
+                    $em->persist($className);
+                    $em->flush();
+                }
+            }
         }
+
+        $output->writeln(sprintf('We got the %d namespace, %d classes and %d interfaces. We find also %d deprecated classes. 
+
+Operation is completed!', $arrCount['namespace'], $arrCount['classes'], $arrCount['interfaces'], $arrCount['deprecated']));
     }
 }
