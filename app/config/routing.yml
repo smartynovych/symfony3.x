@@ -1,7 +1,7 @@
-devmsg_parser:
-    resource: "@MsgParserBundle/Controller/"
-    type:     annotation
-    prefix:   /
+#devmsg_parser:
+#    resource: "@MsgParserBundle/Controller/"
+#    type:     annotation
+#    prefix:   /
 
 app:
     resource: '@AppBundle/Controller/'
