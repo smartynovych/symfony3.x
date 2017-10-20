@@ -26,8 +26,6 @@ test:
   username: travis
   encoding: utf8
 
-script: vendor/bin/phpunit
-
-script: cat var/logs/test.log
-script: cat var/logs/dev.log
-script: cat var/logs/prod.log
+script:
+  - vendor/bin/phpunit
+  - cat var/logs/test.log
