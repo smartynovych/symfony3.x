@@ -7,8 +7,9 @@ use MsgParserBundle\Entity\MsgParserInterfaces;
 use MsgParserBundle\Entity\MsgParserNamespace;
 use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
 use Symfony\Component\Console\Input\InputInterface;
-use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Input\InputArgument;
+use Symfony\Component\Console\Input\InputDefinition;
+use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\DomCrawler\Crawler;
 
 class ParseCreateCommand extends ContainerAwareCommand
@@ -24,14 +25,20 @@ class ParseCreateCommand extends ContainerAwareCommand
 
             // the full command description shown when running the command with
             // the "--help" option
-            ->setHelp('This command allows you to parse the Symfony API schema for a given Symfony branch (default master):
+            ->setHelp('This command allows you to parse the Symfony API schema for a given Symfony branch (default master) and namespace:
             
-    php bin/console msg:parse
-    php bin/console msg:parse 3.1
+    php bin/console msg:parse:create
+    php bin/console msg:parse:create b=3.2
+    php bin/console msg:parse:create b=3.2 ns="Symfony\Bridge\Monolog"
             ')
             // configure an argument
             ->addArgument('branch', InputArgument::OPTIONAL, 'Symfony API branch')
-        ;
+            ->setDefinition(
+                new InputDefinition(array(
+                    new InputArgument('branch', InputArgument::OPTIONAL),
+                    new InputArgument('namespace', InputArgument::OPTIONAL),
+                ))
+            );
     }
 
     protected function execute(InputInterface $input, OutputInterface $output)
@@ -45,8 +52,8 @@ class ParseCreateCommand extends ContainerAwareCommand
             'deprecated' => 0,
         );
 
-        if (in_array(sprintf('%.1f', $input->getArgument('branch')), $allowBranchList)) {
-            $branch = sprintf('%.1f', $input->getArgument('branch'));
+        if (in_array(sprintf('%.1f', trim(ltrim($input->getArgument('branch'), 'b='))), $allowBranchList)) {
+            $branch = sprintf('%.1f', trim(ltrim($input->getArgument('branch'), 'b=')));
         }
 
         $url = sprintf("http://api.symfony.com/%s/", $branch);
@@ -60,10 +67,14 @@ class ParseCreateCommand extends ContainerAwareCommand
         $em = $this->getContainer()->get('doctrine')->getManager();
 
         foreach ($crawler->filter('div.namespace-container > ul > li > a') as $item) {
+            if ($input->getArgument('namespace') and trim($item->textContent) !== trim(ltrim($input->getArgument('namespace'), 'ns='))) {
+                continue;
+            }
+
             $namespace = new MsgParserNamespace();
 
-            $namespace->setName($item->textContent);
-            $namespace->setPath($item->getAttribute('href'));
+            $namespace->setName(trim($item->textContent));
+            $namespace->setPath(trim($item->getAttribute('href')));
             $namespace->setVersion($branch);
             $namespace->setCreatedAt(new \DateTime());
             $namespace->setUpdatedAt(new \DateTime());

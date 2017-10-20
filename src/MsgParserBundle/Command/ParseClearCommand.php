@@ -4,6 +4,8 @@ namespace MsgParserBundle\Command;
 
 use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
 use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Input\InputArgument;
+use Symfony\Component\Console\Input\InputDefinition;
 use Symfony\Component\Console\Output\OutputInterface;
 
 class ParseClearCommand extends ContainerAwareCommand
@@ -21,13 +23,24 @@ class ParseClearCommand extends ContainerAwareCommand
             // the "--help" option
             ->setHelp('This command allows you to clear all local Symfony API data:
             
-    php bin/console msg:clear
+    php bin/console msg:parse:clear
             ')
+            // TODO: для разширения функционала команды
+/*            ->setDefinition(
+                new InputDefinition(array(
+                    new InputArgument('branch', InputArgument::OPTIONAL),
+                    new InputArgument('namespace', InputArgument::OPTIONAL),
+                ))
+            )*/
         ;
     }
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
+        // TODO: для разширения функционала команды
+        /*        $branch = trim(ltrim($input->getArgument('branch'),'b='));
+                $nameSpace = trim(ltrim($input->getArgument('namespace'),'ns='));*/
+
         $em = $this->getContainer()->get('doctrine')->getManager();
 
         $query = $em->createQuery('DELETE FROM MsgParserBundle\Entity\MsgParserClasses');

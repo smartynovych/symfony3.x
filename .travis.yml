@@ -9,6 +9,7 @@ services:
 before_install:
 # - mysql -e 'CREATE DATABASE IF NOT EXISTS myapp_test;'
 
+
 before_script:
   #- echo "USE mysql;\nUPDATE user SET password=PASSWORD('Travis123!') WHERE user='travis';\nFLUSH PRIVILEGES;\n" | mysql -u travis
     #- psql -c 'create database travis_ci_test;' -U postgres
@@ -20,10 +21,8 @@ before_script:
   #- bin/console doctrine:fixtures:load -q
 
 test:
-  adapter: mysql2
-  database: symfony_test
+  database: myapp_test
   username: travis
-  password: ~
   encoding: utf8
 
 script: vendor/bin/phpunit
