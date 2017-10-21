@@ -3,6 +3,7 @@
 namespace MsgParserBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Gedmo\Timestampable\Traits\TimestampableEntity;
 
 /**
  * MsgParserClasses
@@ -12,6 +13,8 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class MsgParserClasses
 {
+    use TimestampableEntity;
+
     /**
      * @var int
      *
@@ -55,20 +58,20 @@ class MsgParserClasses
      * @ORM\Column(name="is_active", type="string", length=1)
      */
     private $is_active = 'Y';
-
-    /**
-     * @var \DateTime
-     *
-     * @ORM\Column(name="created_at", type="datetime")
-     */
-    private $created_at;
-
-    /**
-     * @var \DateTime
-     *
-     * @ORM\Column(name="updated_at", type="datetime")
-     */
-    private $updated_at;
+//
+//    /**
+//     * @var \DateTime
+//     *
+//     * @ORM\Column(name="created_at", type="datetime")
+//     */
+//    private $created_at;
+//
+//    /**
+//     * @var \DateTime
+//     *
+//     * @ORM\Column(name="updated_at", type="datetime")
+//     */
+//    private $updated_at;
 
 
     /**
@@ -201,51 +204,51 @@ class MsgParserClasses
         return $this->is_active;
     }
 
-    /**
-     * Set createdAt
-     *
-     * @param \DateTime $createdAt
-     *
-     * @return MsgParserClasses
-     */
-    public function setCreatedAt($createdAt)
-    {
-        $this->created_at = $createdAt;
-
-        return $this;
-    }
-
-    /**
-     * Get createdAt
-     *
-     * @return \DateTime
-     */
-    public function getCreatedAt()
-    {
-        return $this->created_at;
-    }
-
-    /**
-     * Set updatedAt
-     *
-     * @param \DateTime $updatedAt
-     *
-     * @return MsgParserClasses
-     */
-    public function setUpdatedAt($updatedAt)
-    {
-        $this->updated_at = $updatedAt;
-
-        return $this;
-    }
-
-    /**
-     * Get updatedAt
-     *
-     * @return \DateTime
-     */
-    public function getUpdatedAt()
-    {
-        return $this->updated_at;
-    }
+//    /**
+//     * Set createdAt
+//     *
+//     * @param \DateTime $createdAt
+//     *
+//     * @return MsgParserClasses
+//     */
+//    public function setCreatedAt($createdAt)
+//    {
+//        $this->created_at = $createdAt;
+//
+//        return $this;
+//    }
+//
+//    /**
+//     * Get createdAt
+//     *
+//     * @return \DateTime
+//     */
+//    public function getCreatedAt()
+//    {
+//        return $this->created_at;
+//    }
+//
+//    /**
+//     * Set updatedAt
+//     *
+//     * @param \DateTime $updatedAt
+//     *
+//     * @return MsgParserClasses
+//     */
+//    public function setUpdatedAt($updatedAt)
+//    {
+//        $this->updated_at = $updatedAt;
+//
+//        return $this;
+//    }
+//
+//    /**
+//     * Get updatedAt
+//     *
+//     * @return \DateTime
+//     */
+//    public function getUpdatedAt()
+//    {
+//        return $this->updated_at;
+//    }
 }
