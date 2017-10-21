@@ -26,6 +26,7 @@
         "doctrine/doctrine-bundle": "^1.6",
         "doctrine/orm": "^2.5",
         "fzaninotto/faker": "^1.7",
+        "gedmo/doctrine-extensions": "^2.4",
         "incenteev/composer-parameter-handler": "^2.0",
         "knplabs/knp-paginator-bundle": "^2.6",
         "phpunit/phpunit": "^6.4",
