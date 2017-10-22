@@ -50,26 +50,9 @@ class ParseClearCommand extends ContainerAwareCommand
 
         $namespace = $em->getRepository(MsgParserNamespace::class)->findAll();
         foreach ($namespace as $item) {
-            $class = $em->getRepository(MsgParserClass::class)->findBy(array('namespace' => $item->getId()));
-            foreach ($class  as $classItem) {
-                $em->remove($classItem);
-            }
-            $interface = $em->getRepository(MsgParserInterface::class)->findBy(array('namespace' => $item->getId()));
-            foreach ($interface  as $classItem) {
-                $em->remove($classItem);
-            }
             $em->remove($item);
         }
         $em->flush();
-
-/*        $query = $em->createQuery('DELETE FROM MsgParserBundle\Entity\MsgParserClass');
-        $query->execute();
-
-        $query = $em->createQuery('DELETE FROM MsgParserBundle\Entity\MsgParserNamespace');
-        $query->execute();
-
-        $query = $em->createQuery('DELETE FROM MsgParserBundle\Entity\MsgParserInterface');
-        $query->execute();*/
 
         $output->writeln('You done!');
     }

@@ -26,8 +26,8 @@ class MsgParserInterface
     private $id;
 
     /**
-     * @ORM\ManyToOne(targetEntity="MsgParserNamespace")
-     * @ORM\JoinColumn(name="namespace_id", referencedColumnName="id")
+     * @ORM\ManyToOne(targetEntity="MsgParserNamespace", cascade={"remove"})
+     * @ORM\JoinColumn(name="namespace_id", referencedColumnName="id", onDelete="CASCADE")
      */
     private $namespace;
 
