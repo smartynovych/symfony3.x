@@ -86,35 +86,48 @@ class ParseCreateCommand extends ContainerAwareCommand
 
             $htmlNamespace = file_get_contents($url.$item->getAttribute('href'));
 
-            $crawlerNamespace = new Crawler($htmlNamespace);
+            // Looking for Classes
+            $crawlerClass = new Crawler($htmlNamespace);
+            $nodeClass = $crawlerClass->filterXPath('//div[@class="container-fluid underlined"]/div[@class="row"]/div[@class="col-md-6"]/a');
 
-            // Цикл который паребирает Классы и интерфейсы
-            foreach ($crawlerNamespace->filterXPath('//div[@class="container-fluid underlined"]/div[@class="row"]/div[1]') as $classItem) {
-                foreach ($classItem->childNodes as $child) {
-                    if ($child->nodeName == 'a') {
-                        $className = new MsgParserClass();
-                        $arrCount['classes'] ++;
-                    } elseif ($child->nodeName == 'em') {
-                        $className = new MsgParserInterface();
-                        $arrCount['interfaces'] ++;
-                    } else {
-                        continue;
-                    }
+            foreach ($nodeClass as $itemClass) {
+                $msgParserClass = new MsgParserClass();
+                $arrCount['classes'] ++;
 
-                    $className->setNamespace($namespace);
-                    $className->setName(trim($child->textContent));
-                    $className->setDescription(ltrim(trim(str_replace($className->getName(), '', $child->parentNode->parentNode->textContent)), '.'));
-                    $className->setCreatedAt(new \DateTime());
-                    $className->setUpdatedAt(new \DateTime());
+                $msgParserClass->setNamespace($namespace);
+                $msgParserClass->setName(trim($itemClass->textContent));
+                $msgParserClass->setDescription(ltrim(trim(str_replace($msgParserClass->getName(), '', $itemClass->parentNode->parentNode->textContent)), '.'));
+                $msgParserClass->setCreatedAt(new \DateTime());
+                $msgParserClass->setUpdatedAt(new \DateTime());
 
-                    if (strstr($child->parentNode->textContent, 'deprecated')) {
-                        $className->setDescription(trim(str_replace('deprecated', '', $className->getDescription())));
-                        $className->setIsDeprecated(true);
-                        $arrCount['deprecated'] ++;
-                    }
-
-                    $em->persist($className);
+                if (strstr($itemClass->parentNode->textContent, 'deprecated')) {
+                    $msgParserClass->setDescription(trim(str_replace('deprecated', '', $msgParserClass->getDescription())));
+                    $msgParserClass->setIsDeprecated(true);
+                    $arrCount['deprecated'] ++;
                 }
+                $em->persist($msgParserClass);
+            }
+
+            // Looking for Interfaces
+            $crawlerInterface = new Crawler($htmlNamespace);
+            $nodeInterface = $crawlerInterface->filterXPath('//div[@class="container-fluid underlined"]/div[@class="row"]/div[@class="col-md-6"]/a');
+
+            foreach ($nodeInterface as $itemInterface) {
+                $msgParserInterface = new MsgParserInterface();
+                $arrCount['classes'] ++;
+
+                $msgParserInterface->setNamespace($namespace);
+                $msgParserInterface->setName(trim($itemInterface->textContent));
+                $msgParserInterface->setDescription(ltrim(trim(str_replace($msgParserInterface->getName(), '', $itemInterface->parentNode->parentNode->textContent)), '.'));
+                $msgParserInterface->setCreatedAt(new \DateTime());
+                $msgParserInterface->setUpdatedAt(new \DateTime());
+
+                if (strstr($itemInterface->parentNode->textContent, 'deprecated')) {
+                    $msgParserInterface->setDescription(trim(str_replace('deprecated', '', $msgParserInterface->getDescription())));
+                    $msgParserInterface->setIsDeprecated(true);
+                    $arrCount['deprecated'] ++;
+                }
+                $em->persist($msgParserInterface);
             }
         }
         $em->flush();

@@ -54,6 +54,6 @@ class ParseClearCommand extends ContainerAwareCommand
         }
         $em->flush();
 
-        $output->writeln('You done!');
+        $output->writeln('You did it!');
     }
 }
