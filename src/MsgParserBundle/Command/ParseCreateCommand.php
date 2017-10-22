@@ -82,7 +82,7 @@ class ParseCreateCommand extends ContainerAwareCommand
 
             $em->persist($namespace);
 
-            $arrCount['namespace'] ++;
+            $arrCount['namespace']++;
 
             $htmlNamespace = file_get_contents($url.$item->getAttribute('href'));
 
@@ -92,7 +92,7 @@ class ParseCreateCommand extends ContainerAwareCommand
 
             foreach ($nodeClass as $itemClass) {
                 $msgParserClass = new MsgParserClass();
-                $arrCount['classes'] ++;
+                $arrCount['classes']++;
 
                 $msgParserClass->setNamespace($namespace);
                 $msgParserClass->setName(trim($itemClass->textContent));
@@ -103,7 +103,7 @@ class ParseCreateCommand extends ContainerAwareCommand
                 if (strstr($itemClass->parentNode->textContent, 'deprecated')) {
                     $msgParserClass->setDescription(trim(str_replace('deprecated', '', $msgParserClass->getDescription())));
                     $msgParserClass->setIsDeprecated(true);
-                    $arrCount['deprecated'] ++;
+                    $arrCount['deprecated']++;
                 }
                 $em->persist($msgParserClass);
             }
@@ -114,7 +114,7 @@ class ParseCreateCommand extends ContainerAwareCommand
 
             foreach ($nodeInterface as $itemInterface) {
                 $msgParserInterface = new MsgParserInterface();
-                $arrCount['classes'] ++;
+                $arrCount['classes']++;
 
                 $msgParserInterface->setNamespace($namespace);
                 $msgParserInterface->setName(trim($itemInterface->textContent));
@@ -125,7 +125,7 @@ class ParseCreateCommand extends ContainerAwareCommand
                 if (strstr($itemInterface->parentNode->textContent, 'deprecated')) {
                     $msgParserInterface->setDescription(trim(str_replace('deprecated', '', $msgParserInterface->getDescription())));
                     $msgParserInterface->setIsDeprecated(true);
-                    $arrCount['deprecated'] ++;
+                    $arrCount['deprecated']++;
                 }
                 $em->persist($msgParserInterface);
             }
