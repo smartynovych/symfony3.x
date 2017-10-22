@@ -28,4 +28,3 @@ test:
 
 script:
   - vendor/bin/phpunit
-  - cat var/logs/test.log

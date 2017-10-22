@@ -2,11 +2,14 @@
 
 namespace MsgParserBundle\Command;
 
+use MsgParserBundle\Entity\MsgParserClass;
+use MsgParserBundle\Entity\MsgParserInterface;
 use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputDefinition;
 use Symfony\Component\Console\Output\OutputInterface;
+use MsgParserBundle\Entity\MsgParserNamespace;
 
 class ParseClearCommand extends ContainerAwareCommand
 {
@@ -38,19 +41,35 @@ class ParseClearCommand extends ContainerAwareCommand
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         // TODO: для разширения функционала команды
-        /*        $branch = trim(ltrim($input->getArgument('branch'),'b='));
-                $nameSpace = trim(ltrim($input->getArgument('namespace'),'ns='));*/
+        /*
+        $branch = trim(ltrim($input->getArgument('branch'),'b='));
+        $nameSpace = trim(ltrim($input->getArgument('namespace'),'ns='));
+        */
 
         $em = $this->getContainer()->get('doctrine')->getManager();
 
-        $query = $em->createQuery('DELETE FROM MsgParserBundle\Entity\MsgParserClasses');
+        $namespace = $em->getRepository(MsgParserNamespace::class)->findAll();
+        foreach ($namespace as $item) {
+            $class = $em->getRepository(MsgParserClass::class)->findBy(array('namespace' => $item->getId()));
+            foreach ($class  as $classItem) {
+                $em->remove($classItem);
+            }
+            $interface = $em->getRepository(MsgParserInterface::class)->findBy(array('namespace' => $item->getId()));
+            foreach ($interface  as $classItem) {
+                $em->remove($classItem);
+            }
+            $em->remove($item);
+        }
+        $em->flush();
+
+/*        $query = $em->createQuery('DELETE FROM MsgParserBundle\Entity\MsgParserClass');
         $query->execute();
 
         $query = $em->createQuery('DELETE FROM MsgParserBundle\Entity\MsgParserNamespace');
         $query->execute();
 
-        $query = $em->createQuery('DELETE FROM MsgParserBundle\Entity\MsgParserInterfaces');
-        $query->execute();
+        $query = $em->createQuery('DELETE FROM MsgParserBundle\Entity\MsgParserInterface');
+        $query->execute();*/
 
         $output->writeln('You done!');
     }

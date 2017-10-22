@@ -1,4 +1,4 @@
-#devmsg_parser:
+#msg_parser:
 #    resource: "@MsgParserBundle/Controller/"
 #    type:     annotation
 #    prefix:   /

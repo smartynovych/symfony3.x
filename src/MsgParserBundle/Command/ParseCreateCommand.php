@@ -2,8 +2,8 @@
 
 namespace MsgParserBundle\Command;
 
-use MsgParserBundle\Entity\MsgParserClasses;
-use MsgParserBundle\Entity\MsgParserInterfaces;
+use MsgParserBundle\Entity\MsgParserClass;
+use MsgParserBundle\Entity\MsgParserInterface;
 use MsgParserBundle\Entity\MsgParserNamespace;
 use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
 use Symfony\Component\Console\Input\InputInterface;
@@ -66,6 +66,7 @@ class ParseCreateCommand extends ContainerAwareCommand
 
         $em = $this->getContainer()->get('doctrine')->getManager();
 
+        // Цикл который паребирает Namespace
         foreach ($crawler->filter('div.namespace-container > ul > li > a') as $item) {
             if ($input->getArgument('namespace') and trim($item->textContent) !== trim(ltrim($input->getArgument('namespace'), 'ns='))) {
                 continue;
@@ -80,44 +81,43 @@ class ParseCreateCommand extends ContainerAwareCommand
             $namespace->setUpdatedAt(new \DateTime());
 
             $em->persist($namespace);
-            $em->flush();
+
             $arrCount['namespace'] ++;
 
             $htmlNamespace = file_get_contents($url.$item->getAttribute('href'));
 
             $crawlerNamespace = new Crawler($htmlNamespace);
 
+            // Цикл который паребирает Классы и интерфейсы
             foreach ($crawlerNamespace->filterXPath('//div[@class="container-fluid underlined"]/div[@class="row"]/div[1]') as $classItem) {
                 foreach ($classItem->childNodes as $child) {
                     if ($child->nodeName == 'a') {
-                        $className = new MsgParserClasses();
+                        $className = new MsgParserClass();
                         $arrCount['classes'] ++;
                     } elseif ($child->nodeName == 'em') {
-                        $className = new MsgParserInterfaces();
+                        $className = new MsgParserInterface();
                         $arrCount['interfaces'] ++;
                     } else {
                         continue;
                     }
 
-                    $className->setNamespaceId($namespace->getId());
+                    $className->setNamespace($namespace);
                     $className->setName(trim($child->textContent));
                     $className->setDescription(ltrim(trim(str_replace($className->getName(), '', $child->parentNode->parentNode->textContent)), '.'));
-
-                    if (strstr($child->parentNode->textContent, 'deprecated')) {
-                        $className->setDescription(trim(str_replace('deprecated', '', $className->getDescription())));
-                        $className->setIsDeprecated('Y');
-                        $arrCount['deprecated'] ++;
-                    }
-
                     $className->setCreatedAt(new \DateTime());
                     $className->setUpdatedAt(new \DateTime());
 
+                    if (strstr($child->parentNode->textContent, 'deprecated')) {
+                        $className->setDescription(trim(str_replace('deprecated', '', $className->getDescription())));
+                        $className->setIsDeprecated(true);
+                        $arrCount['deprecated'] ++;
+                    }
+
                     $em->persist($className);
-                    $em->flush();
                 }
             }
         }
-
+        $em->flush();
         $output->writeln(sprintf('We got the %d namespace, %d classes and %d interfaces. We find also %d deprecated classes. 
 
 Operation is completed!', $arrCount['namespace'], $arrCount['classes'], $arrCount['interfaces'], $arrCount['deprecated']));

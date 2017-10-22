@@ -54,7 +54,7 @@ class Article
     private $createdAt;
 
     /**
-     * @return int
+     * @return integer
      */
     public function getId(): int
     {
