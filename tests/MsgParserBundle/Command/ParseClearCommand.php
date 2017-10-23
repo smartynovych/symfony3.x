@@ -21,6 +21,6 @@ class ParseClearCommandTest extends KernelTestCase
         $commandTester->execute(array());
 
         $output = $commandTester->getDisplay();
-        $this->assertContains('You done!', $output);
+        $this->assertContains('You did it!', $output);
     }
 }
