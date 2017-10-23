@@ -1,15 +1,15 @@
 <?php
 
-namespace MsgParserBundle\Command;
+namespace ParserBundle\Command;
 
-use MsgParserBundle\Entity\MsgParserClass;
-use MsgParserBundle\Entity\MsgParserInterface;
+use ParserBundle\Entity\ParserClass;
+use ParserBundle\Entity\ParserInterface;
 use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputDefinition;
 use Symfony\Component\Console\Output\OutputInterface;
-use MsgParserBundle\Entity\MsgParserNamespace;
+use ParserBundle\Entity\ParserNamespace;
 
 class ParseClearCommand extends ContainerAwareCommand
 {
@@ -48,7 +48,7 @@ class ParseClearCommand extends ContainerAwareCommand
 
         $em = $this->getContainer()->get('doctrine')->getManager();
 
-        $namespace = $em->getRepository(MsgParserNamespace::class)->findAll();
+        $namespace = $em->getRepository(ParserNamespace::class)->findAll();
         foreach ($namespace as $item) {
             $em->remove($item);
         }

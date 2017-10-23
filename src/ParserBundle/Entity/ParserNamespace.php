@@ -2,17 +2,17 @@
 
 declare(strict_types=1);
 
-namespace MsgParserBundle\Entity;
+namespace ParserBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Timestampable\Traits\TimestampableEntity;
 
 /**
- * MsgParserClass
+ * ParserNamespace
  *
  * @ORM\Entity
  */
-class MsgParserClass
+class ParserNamespace
 {
     use TimestampableEntity;
 
@@ -26,12 +26,6 @@ class MsgParserClass
     private $id;
 
     /**
-     * @ORM\ManyToOne(targetEntity="MsgParserNamespace", cascade={"remove"})
-     * @ORM\JoinColumn(name="namespace_id", referencedColumnName="id", onDelete="CASCADE")
-     */
-    private $namespace;
-
-    /**
      * @var string
      *
      * @ORM\Column(type="string", length=256)
@@ -41,9 +35,16 @@ class MsgParserClass
     /**
      * @var string
      *
-     * @ORM\Column(name="description", type="text")
+     * @ORM\Column(type="string", length=256)
      */
-    private $description;
+    private $path;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(type="string", length=16)
+     */
+    private $version;
 
     /**
      * @var boolean
@@ -70,37 +71,13 @@ class MsgParserClass
     }
 
     /**
-     * Set namespace
-     *
-     * @param MsgParserNamespace
-     *
-     * @return MsgParserClass
-     */
-    public function setNamespace(MsgParserNamespace $namespace): MsgParserClass
-    {
-        $this->namespace = $namespace;
-
-        return $this;
-    }
-
-    /**
-     * Get namespace
-     *
-     * @return int
-     */
-    public function getNamespace(): int
-    {
-        return (int) $this->namespace;
-    }
-
-    /**
      * Set name
      *
      * @param string $name
      *
-     * @return MsgParserClass
+     * @return ParserNamespace
      */
-    public function setName(string $name): MsgParserClass
+    public function setName(string $name): ParserNamespace
     {
         $this->name = $name;
 
@@ -118,27 +95,51 @@ class MsgParserClass
     }
 
     /**
-     * Set description
+     * Set path
      *
-     * @param string $description
+     * @param string $path
      *
-     * @return MsgParserClass
+     * @return ParserNamespace
      */
-    public function setDescription(string $description): MsgParserClass
+    public function setPath($path): ParserNamespace
     {
-        $this->description = $description;
+        $this->path = $path;
 
         return $this;
     }
 
     /**
-     * Get description
+     * Get path
      *
      * @return string
      */
-    public function getDescription(): string
+    public function getPath(): string
     {
-        return (string) $this->description;
+        return (string) $this->path;
+    }
+
+    /**
+     * Set version
+     *
+     * @param string $version
+     *
+     * @return ParserNamespace
+     */
+    public function setVersion($version): ParserNamespace
+    {
+        $this->version = $version;
+
+        return $this;
+    }
+
+    /**
+     * Get version
+     *
+     * @return string
+     */
+    public function getVersion(): string
+    {
+        return (string) $this->version;
     }
 
     /**
@@ -146,9 +147,9 @@ class MsgParserClass
      *
      * @param bool $isDeprecated
      *
-     * @return MsgParserClass
+     * @return ParserNamespace
      */
-    public function setIsDeprecated(bool $isDeprecated): MsgParserClass
+    public function setIsDeprecated(bool $isDeprecated): ParserNamespace
     {
         $this->isDeprecated = $isDeprecated;
 
@@ -170,9 +171,9 @@ class MsgParserClass
      *
      * @param bool $isActive
      *
-     * @return MsgParserClass
+     * @return ParserNamespace
      */
-    public function setIsActive(bool $isActive): MsgParserClass
+    public function setIsActive(bool $isActive): ParserNamespace
     {
         $this->isActive = $isActive;
 

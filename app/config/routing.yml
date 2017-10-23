@@ -1,5 +1,5 @@
 #msg_parser:
-#    resource: "@MsgParserBundle/Controller/"
+#    resource: "@ParserBundle/Controller/"
 #    type:     annotation
 #    prefix:   /
 

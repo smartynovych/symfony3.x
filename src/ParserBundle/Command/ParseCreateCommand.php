@@ -1,10 +1,10 @@
 <?php
 
-namespace MsgParserBundle\Command;
+namespace ParserBundle\Command;
 
-use MsgParserBundle\Entity\MsgParserClass;
-use MsgParserBundle\Entity\MsgParserInterface;
-use MsgParserBundle\Entity\MsgParserNamespace;
+use ParserBundle\Entity\ParserClass;
+use ParserBundle\Entity\ParserInterface;
+use ParserBundle\Entity\ParserNamespace;
 use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputArgument;
@@ -72,7 +72,7 @@ class ParseCreateCommand extends ContainerAwareCommand
                 continue;
             }
 
-            $namespace = new MsgParserNamespace();
+            $namespace = new ParserNamespace();
 
             $namespace->setName(trim($item->textContent));
             $namespace->setPath(trim($item->getAttribute('href')));
@@ -91,7 +91,7 @@ class ParseCreateCommand extends ContainerAwareCommand
             $nodeClass = $crawlerClass->filterXPath('//div[@class="container-fluid underlined"]/div[@class="row"]/div[@class="col-md-6"]/a');
 
             foreach ($nodeClass as $itemClass) {
-                $msgParserClass = new MsgParserClass();
+                $msgParserClass = new ParserClass();
                 $arrCount['classes']++;
 
                 $msgParserClass->setNamespace($namespace);
@@ -113,7 +113,7 @@ class ParseCreateCommand extends ContainerAwareCommand
             $nodeInterface = $crawlerInterface->filterXPath('//div[@class="container-fluid underlined"]/div[@class="row"]/div[@class="col-md-6"]/a');
 
             foreach ($nodeInterface as $itemInterface) {
-                $msgParserInterface = new MsgParserInterface();
+                $msgParserInterface = new ParserInterface();
                 $arrCount['classes']++;
 
                 $msgParserInterface->setNamespace($namespace);

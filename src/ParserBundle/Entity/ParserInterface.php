@@ -2,17 +2,17 @@
 
 declare(strict_types=1);
 
-namespace MsgParserBundle\Entity;
+namespace ParserBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Timestampable\Traits\TimestampableEntity;
 
 /**
- * MsgParserInterfaces
+ * ParserInterfaces
  *
  * @ORM\Entity
  */
-class MsgParserInterface
+class ParserInterface
 {
     use TimestampableEntity;
 
@@ -26,7 +26,7 @@ class MsgParserInterface
     private $id;
 
     /**
-     * @ORM\ManyToOne(targetEntity="MsgParserNamespace", cascade={"remove"})
+     * @ORM\ManyToOne(targetEntity="ParserNamespace", cascade={"remove"})
      * @ORM\JoinColumn(name="namespace_id", referencedColumnName="id", onDelete="CASCADE")
      */
     private $namespace;
@@ -72,11 +72,11 @@ class MsgParserInterface
     /**
      * Set namespace
      *
-     * @param MsgParserNamespace
+     * @param ParserNamespace
      *
-     * @return MsgParserInterface
+     * @return ParserInterface
      */
-    public function setNamespace(MsgParserNamespace $namespace): MsgParserInterface
+    public function setNamespace(ParserNamespace $namespace): ParserInterface
     {
         $this->namespace = $namespace;
 
@@ -98,9 +98,9 @@ class MsgParserInterface
      *
      * @param string $name
      *
-     * @return MsgParserInterface
+     * @return ParserInterface
      */
-    public function setName(string $name): MsgParserInterface
+    public function setName(string $name): ParserInterface
     {
         $this->name = $name;
 
@@ -122,9 +122,9 @@ class MsgParserInterface
      *
      * @param string $description
      *
-     * @return MsgParserInterface
+     * @return ParserInterface
      */
-    public function setDescription(string $description): MsgParserInterface
+    public function setDescription(string $description): ParserInterface
     {
         $this->description = $description;
 
@@ -146,9 +146,9 @@ class MsgParserInterface
      *
      * @param bool $isDeprecated
      *
-     * @return MsgParserInterface
+     * @return ParserInterface
      */
-    public function setIsDeprecated(bool $isDeprecated): MsgParserInterface
+    public function setIsDeprecated(bool $isDeprecated): ParserInterface
     {
         $this->isDeprecated = $isDeprecated;
 
@@ -170,9 +170,9 @@ class MsgParserInterface
      *
      * @param bool $isActive
      *
-     * @return MsgParserInterface
+     * @return ParserInterface
      */
-    public function setIsActive(bool $isActive): MsgParserInterface
+    public function setIsActive(bool $isActive): ParserInterface
     {
         $this->isActive = $isActive;
 
