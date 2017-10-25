@@ -6,11 +6,12 @@ namespace ParserBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Timestampable\Traits\TimestampableEntity;
+use Gedmo\Mapping\Annotation as Gedmo;
 
 /**
- * ParserNamespace
- *
- * @ORM\Entity
+ * @Gedmo\Tree(type="nested")
+ * @ORM\Table(name="parser_namespace")
+ * @ORM\Entity(repositoryClass="Gedmo\Tree\Entity\Repository\NestedTreeRepository")
  */
 class ParserNamespace
 {
@@ -44,7 +45,7 @@ class ParserNamespace
      *
      * @ORM\Column(type="string", length=16)
      */
-    private $version;
+    private $version = 'master';
 
     /**
      * @var boolean
@@ -59,6 +60,38 @@ class ParserNamespace
      * @ORM\Column(type="boolean")
      */
     private $isActive = true;
+
+    /**
+     * @Gedmo\TreeLeft
+     * @ORM\Column(name="lft", type="integer")
+     */
+    private $lft;
+
+    /**
+     * @Gedmo\TreeLevel
+     * @ORM\Column(name="lvl", type="integer")
+     */
+    private $lvl;
+
+    /**
+     * @Gedmo\TreeRight
+     * @ORM\Column(name="rgt", type="integer")
+     */
+    private $rgt;
+
+    /**
+     * @Gedmo\TreeRoot
+     * @ORM\ManyToOne(targetEntity="ParserNamespace")
+     * @ORM\JoinColumn(name="tree_root", referencedColumnName="id", onDelete="CASCADE")
+     */
+    private $root;
+
+    /**
+     * @Gedmo\TreeParent
+     * @ORM\ManyToOne(targetEntity="ParserNamespace")
+     * @ORM\JoinColumn(name="parent_id", referencedColumnName="id", onDelete="CASCADE")
+     */
+    private $parent;
 
     /**
      * Get id
@@ -188,5 +221,20 @@ class ParserNamespace
     public function getIsActive(): bool
     {
         return (bool) $this->isActive;
+    }
+
+    public function getRoot()
+    {
+        return $this->root;
+    }
+
+    public function setParent(ParserNamespace $parent = null)
+    {
+        $this->parent = $parent;
+    }
+
+    public function getParent()
+    {
+        return $this->parent;
     }
 }

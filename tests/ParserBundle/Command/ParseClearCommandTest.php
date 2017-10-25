@@ -2,7 +2,7 @@
 
 namespace Tests\AppBundle\Command;
 
-use MsgParserBundle\Command\ParseClearCommand;
+use ParserBundle\Command\ParseClearCommand;
 use Symfony\Bundle\FrameworkBundle\Console\Application;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Component\Console\Tester\CommandTester;
@@ -16,7 +16,7 @@ class ParseClearCommandTest extends KernelTestCase
 
         $application->add(new ParseClearCommand());
 
-        $command = $application->find('msg:parse:clear');
+        $command = $application->find('parse:clear');
         $commandTester = new CommandTester($command);
         $commandTester->execute(array());
 

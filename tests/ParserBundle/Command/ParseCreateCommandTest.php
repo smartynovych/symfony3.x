@@ -2,7 +2,7 @@
 
 namespace Tests\AppBundle\Command;
 
-use MsgParserBundle\Command\ParseCreateCommand;
+use ParserBundle\Command\ParseCreateCommand;
 use Symfony\Bundle\FrameworkBundle\Console\Application;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Component\Console\Tester\CommandTester;
@@ -16,9 +16,9 @@ class ParseCreateCommandTest extends KernelTestCase
 
         $application->add(new ParseCreateCommand());
 
-        $command = $application->find('msg:parse:create');
+        $command = $application->find('parse:create');
         $commandTester = new CommandTester($command);
-        $commandTester->execute(array('branch' => 'master', 'namespace' => 'Symfony\Component\Routing\Exception'));
+        $commandTester->execute(array('branch' => 'master', 'url' => 'http://api.symfony.com/master/Symfony/Component/Translation.html'));
 
         $output = $commandTester->getDisplay();
         $this->assertContains('Operation is completed!', $output);

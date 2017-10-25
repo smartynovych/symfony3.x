@@ -14,125 +14,132 @@ use Symfony\Component\DomCrawler\Crawler;
 
 class ParseCreateCommand extends ContainerAwareCommand
 {
+    /**
+     * Entity Manager
+     */
+    private $em;
+
+    /**
+     * Symfony branch
+     *
+     * @var string
+     */
+    private $branch = 'master';
+
     protected function configure()
     {
         $this
             // the name of the command (the part after "bin/console")
-            ->setName('msg:parse:create')
+            ->setName('parse:create')
 
             // the short description shown while running "php bin/console list"
             ->setDescription('Make a new parse Symfony API request.')
 
             // the full command description shown when running the command with
             // the "--help" option
-            ->setHelp('This command allows you to parse the Symfony API schema for a given Symfony branch (default master) and namespace:
+            ->setHelp('This command allows you to parse the Symfony API schema for a given Symfony branch (default master) and root url:
             
-    php bin/console msg:parse:create
-    php bin/console msg:parse:create b=3.2
-    php bin/console msg:parse:create b=3.2 ns="Symfony\Bridge\Monolog"
+    php bin/console parse:create
+    php bin/console parse:create b=3.2
+    php bin/console parse:create b=3.2 url=http://api.symfony.com/master/Symfony/Component/Translation.html
             ')
             // configure an argument
             ->addArgument('branch', InputArgument::OPTIONAL, 'Symfony API branch')
             ->setDefinition(
                 new InputDefinition(array(
                     new InputArgument('branch', InputArgument::OPTIONAL),
-                    new InputArgument('namespace', InputArgument::OPTIONAL),
+                    new InputArgument('url', InputArgument::OPTIONAL),
                 ))
             );
     }
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $branch = 'master';
         $allowBranchList = array(2.7, 2.8, 3.2, 3.3, 3.4);
-        $arrCount = array(
-            'namespace' => 0,
-            'classes' => 0,
-            'interfaces' => 0,
-            'deprecated' => 0,
-        );
 
         if (in_array(sprintf('%.1f', trim(ltrim($input->getArgument('branch'), 'b='))), $allowBranchList)) {
-            $branch = sprintf('%.1f', trim(ltrim($input->getArgument('branch'), 'b=')));
+            $this->branch = sprintf('%.1f', trim(ltrim($input->getArgument('branch'), 'b=')));
         }
 
-        $url = sprintf("http://api.symfony.com/%s/", $branch);
+        $url = sprintf("http://api.symfony.com/%s/Symfony.html", $this->branch);
+        if ($input->getArgument('url')) {
+            $url = trim(ltrim($input->getArgument('url'), 'url='));
+        }
 
+        $this->em = $this->getContainer()->get('doctrine')->getManager();
+        $namespace = new ParserNamespace();
+        $namespace->setName('Symfony');
+        $namespace->setPath('Symfony.html');
+        $namespace->setVersion($this->branch);
+        $namespace->setCreatedAt(new \DateTime());
+        $namespace->setUpdatedAt(new \DateTime());
+        $this->em->persist($namespace);
+
+        $this->parse($url, $namespace);
+        $this->em->flush();
+        $output->writeln('Operation is completed!');
+    }
+
+    private function parse($url, $parent = null)
+    {
+        echo $url.'
+';
+
+        // Looking for Classes
         $html = file_get_contents($url);
 
-        $crawler = new Crawler($html);
+        $crawlerClass = new Crawler($html);
+        $nodeClass = $crawlerClass->filterXPath('//div[@class="container-fluid underlined"]/div[@class="row"]/div[@class="col-md-6"]/a');
 
-        $output->writeln('Source url: '.$url);
+        foreach ($nodeClass as $itemClass) {
+            $parserClass = new ParserClass();
 
-        $em = $this->getContainer()->get('doctrine')->getManager();
+            $parserClass->setNamespace($parent);
+            $parserClass->setName(trim($itemClass->textContent));
+            $parserClass->setDescription(ltrim(trim(str_replace($parserClass->getName(), '', $itemClass->parentNode->parentNode->textContent)), '.'));
+            $parserClass->setCreatedAt(new \DateTime());
+            $parserClass->setUpdatedAt(new \DateTime());
 
-        // Цикл который паребирает Namespace
-        foreach ($crawler->filter('div.namespace-container > ul > li > a') as $item) {
-            if ($input->getArgument('namespace') and trim($item->textContent) !== trim(ltrim($input->getArgument('namespace'), 'ns='))) {
-                continue;
+            if (strstr($itemClass->parentNode->textContent, 'deprecated')) {
+                $parserClass->setDescription(trim(str_replace('deprecated', '', $parserClass->getDescription())));
+                $parserClass->setIsDeprecated(true);
             }
-
-            $namespace = new ParserNamespace();
-
-            $namespace->setName(trim($item->textContent));
-            $namespace->setPath(trim($item->getAttribute('href')));
-            $namespace->setVersion($branch);
-            $namespace->setCreatedAt(new \DateTime());
-            $namespace->setUpdatedAt(new \DateTime());
-
-            $em->persist($namespace);
-
-            $arrCount['namespace']++;
-
-            $htmlNamespace = file_get_contents($url.$item->getAttribute('href'));
-
-            // Looking for Classes
-            $crawlerClass = new Crawler($htmlNamespace);
-            $nodeClass = $crawlerClass->filterXPath('//div[@class="container-fluid underlined"]/div[@class="row"]/div[@class="col-md-6"]/a');
-
-            foreach ($nodeClass as $itemClass) {
-                $msgParserClass = new ParserClass();
-                $arrCount['classes']++;
-
-                $msgParserClass->setNamespace($namespace);
-                $msgParserClass->setName(trim($itemClass->textContent));
-                $msgParserClass->setDescription(ltrim(trim(str_replace($msgParserClass->getName(), '', $itemClass->parentNode->parentNode->textContent)), '.'));
-                $msgParserClass->setCreatedAt(new \DateTime());
-                $msgParserClass->setUpdatedAt(new \DateTime());
-
-                if (strstr($itemClass->parentNode->textContent, 'deprecated')) {
-                    $msgParserClass->setDescription(trim(str_replace('deprecated', '', $msgParserClass->getDescription())));
-                    $msgParserClass->setIsDeprecated(true);
-                    $arrCount['deprecated']++;
-                }
-                $em->persist($msgParserClass);
-            }
-
-            // Looking for Interfaces
-            $crawlerInterface = new Crawler($htmlNamespace);
-            $nodeInterface = $crawlerInterface->filterXPath('//div[@class="container-fluid underlined"]/div[@class="row"]/div[@class="col-md-6"]/a');
-
-            foreach ($nodeInterface as $itemInterface) {
-                $msgParserInterface = new ParserInterface();
-                $arrCount['classes']++;
-
-                $msgParserInterface->setNamespace($namespace);
-                $msgParserInterface->setName(trim($itemInterface->textContent));
-                $msgParserInterface->setDescription(ltrim(trim(str_replace($msgParserInterface->getName(), '', $itemInterface->parentNode->parentNode->textContent)), '.'));
-                $msgParserInterface->setCreatedAt(new \DateTime());
-                $msgParserInterface->setUpdatedAt(new \DateTime());
-
-                if (strstr($itemInterface->parentNode->textContent, 'deprecated')) {
-                    $msgParserInterface->setDescription(trim(str_replace('deprecated', '', $msgParserInterface->getDescription())));
-                    $msgParserInterface->setIsDeprecated(true);
-                    $arrCount['deprecated']++;
-                }
-                $em->persist($msgParserInterface);
-            }
+            $this->em->persist($parserClass);
         }
-        $em->flush();
-        $output->writeln(sprintf('We got the %d namespace, %d classes and %d interfaces. We find also %d deprecated classes. 
 
-Operation is completed!', $arrCount['namespace'], $arrCount['classes'], $arrCount['interfaces'], $arrCount['deprecated']));
+        // Looking for Interfaces
+        $crawlerInterface = new Crawler($html);
+        $nodeInterface = $crawlerInterface->filterXPath('//div[@class="container-fluid underlined"]/div[@class="row"]/div[@class="col-md-6"]/em/a');
+
+        foreach ($nodeInterface as $itemInterface) {
+            $parserInterface = new ParserInterface();
+
+            $parserInterface->setNamespace($parent);
+            $parserInterface->setName(trim($itemInterface->textContent));
+            $parserInterface->setDescription(ltrim(trim(str_replace($parserInterface->getName(), '', $itemInterface->parentNode->parentNode->textContent)), '.'));
+            $parserInterface->setCreatedAt(new \DateTime());
+            $parserInterface->setUpdatedAt(new \DateTime());
+
+            if (strstr($itemInterface->parentNode->textContent, 'deprecated')) {
+                $parserInterface->setDescription(trim(str_replace('deprecated', '', $parserInterface->getDescription())));
+                $parserInterface->setIsDeprecated(true);
+            }
+            $this->em->persist($parserInterface);
+        }
+
+        $crawlerNamespace = new Crawler($html);
+        foreach ($crawlerNamespace->filter('div.namespace-list > a') as $item) {
+            $namespace  = new ParserNamespace();
+            $namespace ->setName(trim($item->textContent));
+            $namespace ->setPath(str_replace('../', '', trim($item->getAttribute('href'))));
+            $namespace ->setVersion($this->branch);
+            $namespace ->setCreatedAt(new \DateTime());
+            $namespace ->setUpdatedAt(new \DateTime());
+            $namespace ->setParent($parent);
+            $this->em->persist($namespace);
+
+            $url = 'http://api.symfony.com/master/'.$namespace ->getPath();
+            $this->parse($url, $namespace);
+        }
     }
 }
