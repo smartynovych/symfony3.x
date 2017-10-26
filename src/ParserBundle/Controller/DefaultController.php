@@ -14,18 +14,16 @@ class DefaultController extends Controller
 {
     /**
      * @Route("/parser/tree", name="parser_tree")
-     *
-     * @return string|\Symfony\Component\HttpFoundation\Response
      */
     public function indexAction()
     {
-        return $this->render(':parser:index.html.twig');
+        return $this->render('parser/index.html.twig');
     }
 
     /**
      * @Route("/parser/source", name="parser_source")
      *
-     * @return \Symfony\Component\HttpFoundation\JsonResponse
+     * @Method({"GET"})
      */
     public function sourceAction()
     {

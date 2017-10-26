@@ -71,8 +71,6 @@ class ParseCreateCommand extends ContainerAwareCommand
         $namespace->setName('Symfony');
         $namespace->setPath('Symfony.html');
         $namespace->setVersion($this->branch);
-        $namespace->setCreatedAt(new \DateTime());
-        $namespace->setUpdatedAt(new \DateTime());
         $this->em->persist($namespace);
 
         $this->parse($url, $namespace);
@@ -97,8 +95,6 @@ class ParseCreateCommand extends ContainerAwareCommand
             $parserClass->setNamespace($parent);
             $parserClass->setName(trim($itemClass->textContent));
             $parserClass->setDescription(ltrim(trim(str_replace($parserClass->getName(), '', $itemClass->parentNode->parentNode->textContent)), '.'));
-            $parserClass->setCreatedAt(new \DateTime());
-            $parserClass->setUpdatedAt(new \DateTime());
 
             if (strstr($itemClass->parentNode->textContent, 'deprecated')) {
                 $parserClass->setDescription(trim(str_replace('deprecated', '', $parserClass->getDescription())));
@@ -117,8 +113,6 @@ class ParseCreateCommand extends ContainerAwareCommand
             $parserInterface->setNamespace($parent);
             $parserInterface->setName(trim($itemInterface->textContent));
             $parserInterface->setDescription(ltrim(trim(str_replace($parserInterface->getName(), '', $itemInterface->parentNode->parentNode->textContent)), '.'));
-            $parserInterface->setCreatedAt(new \DateTime());
-            $parserInterface->setUpdatedAt(new \DateTime());
 
             if (strstr($itemInterface->parentNode->textContent, 'deprecated')) {
                 $parserInterface->setDescription(trim(str_replace('deprecated', '', $parserInterface->getDescription())));

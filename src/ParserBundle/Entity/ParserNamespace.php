@@ -89,7 +89,7 @@ class ParserNamespace
     /**
      * @Gedmo\TreeParent
      * @ORM\ManyToOne(targetEntity="ParserNamespace")
-     * @ORM\JoinColumn(name="parent_id", referencedColumnName="id", onDelete="CASCADE")
+     * @ORM\JoinColumn(name="parent_id", referencedColumnName="id", onDelete="CASCADE", nullable=true)
      */
     private $parent;
 
@@ -223,17 +223,19 @@ class ParserNamespace
         return (bool) $this->isActive;
     }
 
-    public function getRoot()
+    public function getRoot(): ?ParserNamespace
     {
         return $this->root;
     }
 
-    public function setParent(ParserNamespace $parent = null)
+    public function setParent(?ParserNamespace $parent): ParserNamespace
     {
         $this->parent = $parent;
+
+        return $this;
     }
 
-    public function getParent()
+    public function getParent(): ?ParserNamespace
     {
         return $this->parent;
     }

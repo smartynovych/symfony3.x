@@ -1,7 +1,5 @@
 <?php
 
-// file: src/Acme/DemoBundle/Listener/DoctrineExtensionListener.php
-
 namespace ParserBundle\Listener;
 
 use Symfony\Component\HttpKernel\Event\GetResponseEvent;
