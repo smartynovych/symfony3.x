@@ -4,9 +4,6 @@ namespace ParserBundle\Controller;
 
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use Symfony\Component\HttpFoundation\Response;
-use ParserBundle\Entity\ParserClass;
-use ParserBundle\Entity\ParserInterface;
 use ParserBundle\Entity\ParserNamespace;
 
 /**
@@ -22,8 +19,18 @@ class DefaultController extends Controller
      */
     public function indexAction()
     {
-        return new Response(
-            '<html><body>Hi</body></html>'
-        );
+        return $this->render(':parser:index.html.twig');
+    }
+
+    /**
+     * @Route("/parser/source", name="parser_source")
+     *
+     * @return \Symfony\Component\HttpFoundation\JsonResponse
+     */
+    public function sourceAction()
+    {
+        $repo = $this->getDoctrine()->getManager()->getRepository(ParserNamespace::class);
+        $namespace = $repo->childrenHierarchy();
+        return $this->json($namespace);
     }
 }

@@ -6,3 +6,7 @@
 app:
     resource: '@AppBundle/Controller/'
     type: annotation
+
+parser:
+    resource: '@ParserBundle/Controller/'
+    type: annotation
