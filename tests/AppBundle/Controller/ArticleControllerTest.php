@@ -159,14 +159,15 @@ class ArticleControllerTest extends WebTestCase
         }
     }
 
-    /**
-     * {@inheritDoc}
-     */
-    protected function tearDown()
+    public function testAdminAction()
     {
-        parent::tearDown();
+        $client = static::createClient();
 
-        $this->em->close();
-        $this->em = null; // avoid memory leaks
+        $crawler = $client->request('GET', '/admin', array(), array(), array('PHP_AUTH_USER' => 'test', 'PHP_AUTH_PW' => 'test'));
+
+        $this->assertGreaterThan(
+            0,
+            $crawler->filter('html:contains("Admin page!")')->count()
+        );
     }
 }
