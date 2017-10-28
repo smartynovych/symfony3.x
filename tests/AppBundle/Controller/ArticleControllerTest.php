@@ -158,16 +158,4 @@ class ArticleControllerTest extends WebTestCase
             $this->assertTrue($article, 'No article found');
         }
     }
-
-    public function testAdminAction()
-    {
-        $client = static::createClient();
-
-        $crawler = $client->request('GET', '/admin', array(), array(), array('PHP_AUTH_USER' => 'test', 'PHP_AUTH_PW' => 'test'));
-
-        $this->assertGreaterThan(
-            0,
-            $crawler->filter('html:contains("Admin page!")')->count()
-        );
-    }
 }
