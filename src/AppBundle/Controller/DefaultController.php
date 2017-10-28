@@ -27,6 +27,7 @@ class DefaultController extends Controller
      */
     public function adminAction()
     {
-        return $this->render('admin/index.html.twig');
+        $user = $this->getUser();
+        return $this->render('admin/index.html.twig', array('username' => $user->getUsername()));
     }
 }

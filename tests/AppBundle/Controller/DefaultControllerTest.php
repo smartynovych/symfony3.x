@@ -26,11 +26,13 @@ class DefaultControllerTest extends WebTestCase
 
         $this->assertEquals(401, $client->getResponse()->getStatusCode());
 
-        $crawler = $client->request('GET', '/admin', array(), array(), array('PHP_AUTH_USER' => 'test', 'PHP_AUTH_PW' => 'test'));
+        $username = 'msg';
+
+        $crawler = $client->request('GET', '/admin', array(), array(), array('PHP_AUTH_USER' => 'msg', 'PHP_AUTH_PW' => 'admin'));
 
         $this->assertGreaterThan(
             0,
-            $crawler->filter('html:contains("Admin page!")')->count()
+            $crawler->filter('html:contains("Hello, '.$username.'")')->count()
         );
     }
 }
