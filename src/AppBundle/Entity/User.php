@@ -74,11 +74,11 @@ class User implements UserInterface, \Serializable
     }
 
     /**
-     * @param string $username
+     * @param mixed $username
      *
      * @return User
      */
-    public function setUsername(string $username): User
+    public function setUsername($username): User
     {
         $this->username = $username;
         return $this;
@@ -105,7 +105,7 @@ class User implements UserInterface, \Serializable
      *
      * @return User
      */
-    public function setPassword(string $password): User
+    public function setPassword($password): User
     {
         $this->password = $password;
         return $this;
@@ -120,11 +120,11 @@ class User implements UserInterface, \Serializable
     }
 
     /**
-     * @param string $plainPassword
+     * @param mixed $plainPassword
      *
      * @return User
      */
-    public function setPlainPassword(string $plainPassword): User
+    public function setPlainPassword($plainPassword): User
     {
         $this->plainPassword = $plainPassword;
         return $this;
@@ -139,11 +139,11 @@ class User implements UserInterface, \Serializable
     }
 
     /**
-     * @param string $email
+     * @param mixed $email
      *
      * @return User
      */
-    public function setEmail(string $email): User
+    public function setEmail($email): User
     {
         $this->email = $email;
         return $this;

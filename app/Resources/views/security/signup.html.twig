@@ -3,11 +3,30 @@
 {% block body %}
     <h2>Sign up form</h2>
     <hr>
+    <div class="row">
+        <div class="col-6">
 {{ form_start(form) }}
     {{ form_row(form.username) }}
     {{ form_row(form.email) }}
     {{ form_row(form.plainPassword.first) }}
     {{ form_row(form.plainPassword.second) }}
-<button type="submit">SignUp</button>
+<button type="submit" class="btn-default btn btn-primary">SignUp</button>
 {{ form_end(form) }}
+        </div>
+        <div class="col-6">
+            {% if errors|length > 0 %}
+                <div class="alert alert-danger">
+                <ul>
+                    {% set lastError = null %}
+                    {% for error in errors %}
+                        {% if lastError != error %}
+                            <li>{{ error.messageTemplate|trans(error.messageParameters, 'validators') }}</li>
+                        {% endif %}
+                        {% set lastError = error %}
+                    {% endfor %}
+                </ul>
+                </div>
+            {% endif %}
+        </div>
+    </div>
 {% endblock %}

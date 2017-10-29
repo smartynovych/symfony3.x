@@ -9,7 +9,7 @@
             <div class="col">
                 <div class="alert alert-light">
                     {% if is_granted('IS_AUTHENTICATED_FULLY') == false %}
-                    <div class="text-md-right"><span><a href="{{ path("auth") }}">Sign In</a></span>&nbsp&nbsp&nbsp&nbsp&nbsp<span class="text-md-right"> <a href="{{ path("user_signup") }}">Sign Up</a></span></div>
+                    <div class="text-md-right"><span><a href="{{ path("auth") }}">Sign In</a></span>&nbsp&nbsp&nbsp|&nbsp&nbsp&nbsp<span class="text-md-right"> <a href="{{ path("user_signup") }}">Sign Up</a></span></div>
                     {% else %}
                     <div class="text-md-right"><span class="text-md-right"> <a href="{{ path("logout") }}">Sign out</a></span></div>
                     {% endif %}
