@@ -6,7 +6,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 
 /**
- * Class ArticleController
+ * Class DefaultController
  * @package AppBundle\Controller
  */
 class DefaultController extends Controller
@@ -20,14 +20,5 @@ class DefaultController extends Controller
         return $this->render('default/index.html.twig', [
             'base_dir' => realpath($this->getParameter('kernel.project_dir')).DIRECTORY_SEPARATOR,
         ]);
-    }
-
-    /**
-     * @Route("/admin", name="admin")
-     */
-    public function adminAction()
-    {
-        $user = $this->getUser();
-        return $this->render('admin/index.html.twig', array('username' => $user->getUsername()));
     }
 }

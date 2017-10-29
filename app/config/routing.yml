@@ -10,3 +10,6 @@ app:
 parser:
     resource: '@ParserBundle/Controller/'
     type: annotation
+
+logout:
+    path: /logout

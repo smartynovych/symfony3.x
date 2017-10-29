@@ -8,7 +8,11 @@
             </div>
             <div class="col">
                 <div class="alert alert-light">
-                    <p class="text-md-right"> <a href="{{ path("admin") }}">Admin Page</a></p>
+                    {% if is_granted('IS_AUTHENTICATED_FULLY') == false %}
+                    <p class="text-md-right"> <a href="{{ path("auth") }}">Sign In</a></p>
+                    {% else %}
+                    <p class="text-md-right"> <a href="{{ path("logout") }}">Sign out</a></p>
+                    {% endif %}
                 </div>
             </div>
         </div>

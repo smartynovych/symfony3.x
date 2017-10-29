@@ -11,6 +11,7 @@ parameters:
 
 framework:
     #esi: ~
+    csrf_protection: ~
     translator: { fallbacks: ['%locale%'] }
     secret: '%secret%'
     router:
