@@ -13,3 +13,7 @@ parser:
 
 logout:
     path: /logout
+
+user_registration:
+    path:     /signup
+    defaults: { _controller: AppBundle:Registration:signup }
