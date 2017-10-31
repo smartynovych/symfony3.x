@@ -22,11 +22,19 @@ Encore
     // allow legacy applications to use $/jQuery as a global variable
     .autoProvidejQuery()
 
-    .enableSourceMaps(!Encore.isProduction())
+//.enableSourceMaps(!Encore.isProduction())
 
 // create hashed filenames (e.g. app.abc123.css)
 //.enableVersioning()
 ;
+
+module.exports = {
+    loader: 'css-loader',
+    options: {
+        minimize: true,
+        sourceMap: false
+    }
+};
 
 // export the final configuration
 module.exports = Encore.getWebpackConfig();
