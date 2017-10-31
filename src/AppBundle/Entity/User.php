@@ -81,6 +81,7 @@ class User implements UserInterface, \Serializable
     public function setUsername($username): User
     {
         $this->username = $username;
+
         return $this;
     }
 
@@ -108,6 +109,7 @@ class User implements UserInterface, \Serializable
     public function setPassword($password): User
     {
         $this->password = $password;
+
         return $this;
     }
 
@@ -127,6 +129,7 @@ class User implements UserInterface, \Serializable
     public function setPlainPassword($plainPassword): User
     {
         $this->plainPassword = $plainPassword;
+
         return $this;
     }
 
@@ -146,6 +149,7 @@ class User implements UserInterface, \Serializable
     public function setEmail($email): User
     {
         $this->email = $email;
+
         return $this;
     }
 
@@ -165,6 +169,7 @@ class User implements UserInterface, \Serializable
     public function setIsActive(bool $isActive): User
     {
         $this->isActive = $isActive;
+
         return $this;
     }
 
