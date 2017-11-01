@@ -29,6 +29,20 @@ class ArticleControllerTest extends WebTestCase
     public function testCreateArticle()
     {
         $client = static::createClient();
+        $client->request('GET', '/article/create');
+        $crawler = $client->followRedirect();
+
+        $username = 'msg';
+        $password = 'admin';
+        $token = $crawler->filter('input[name="_csrf_token"]')->extract(array('value'));
+
+        $client->request('POST', '/auth', array(
+            '_username' => $username,
+            '_password' => $password,
+            '_csrf_token' => $token[0],
+            '_target_path' => '/admin',
+        ));
+
         $crawler = $client->request('GET', '/article/create');
 
         $this->assertGreaterThan(
@@ -68,6 +82,19 @@ class ArticleControllerTest extends WebTestCase
     public function testIndexArticle()
     {
         $client = static::createClient();
+        $client->request('GET', '/article/');
+        $crawler = $client->followRedirect();
+
+        $username = 'msg';
+        $password = 'admin';
+        $token = $crawler->filter('input[name="_csrf_token"]')->extract(array('value'));
+
+        $client->request('POST', '/auth', array(
+            '_username' => $username,
+            '_password' => $password,
+            '_csrf_token' => $token[0],
+            '_target_path' => '/admin',
+        ));
 
         $client->request('GET', '/article/');
 
@@ -81,6 +108,19 @@ class ArticleControllerTest extends WebTestCase
 
         if ($article) {
             $client = static::createClient();
+            $client->request('GET', '/article/');
+            $crawler = $client->followRedirect();
+
+            $username = 'msg';
+            $password = 'admin';
+            $token = $crawler->filter('input[name="_csrf_token"]')->extract(array('value'));
+
+            $client->request('POST', '/auth', array(
+                '_username' => $username,
+                '_password' => $password,
+                '_csrf_token' => $token[0],
+                '_target_path' => '/admin',
+            ));
 
             $client->request('GET', '/article/detail/'.$article->getId());
 
@@ -97,6 +137,19 @@ class ArticleControllerTest extends WebTestCase
 
         if ($article) {
             $client = static::createClient();
+            $client->request('GET', '/article/');
+            $crawler = $client->followRedirect();
+
+            $username = 'msg';
+            $password = 'admin';
+            $token = $crawler->filter('input[name="_csrf_token"]')->extract(array('value'));
+
+            $client->request('POST', '/auth', array(
+                '_username' => $username,
+                '_password' => $password,
+                '_csrf_token' => $token[0],
+                '_target_path' => '/admin',
+            ));
 
             $crawler = $client->request('GET', '/article/update/'.$article->getId());
 

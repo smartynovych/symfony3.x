@@ -4,6 +4,7 @@ declare(strict_types = 1);
 
 namespace AppBundle\Entity;
 
+use Gedmo\Mapping\Annotation as Gedmo;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -52,6 +53,30 @@ class Article
      * @ORM\Column(type="datetime", name="created_at")
      */
     private $createdAt;
+
+    /**
+     * @var string $createdFromIp
+     *
+     * @Gedmo\IpTraceable(on="create")
+     * @ORM\Column(type="string", length=45, nullable=true)
+     */
+    private $createdFromIp;
+
+    /**
+     * @var string $updatedFromIp
+     *
+     * @Gedmo\IpTraceable(on="update")
+     * @ORM\Column(type="string", length=45, nullable=true)
+     */
+    private $updatedFromIp;
+
+    /**
+     * @var datetime $contentChangedFromIp
+     *
+     * @ORM\Column(name="content_changed_by", type="string", nullable=true, length=45)
+     * @Gedmo\IpTraceable(on="change", field={"name", "description", "created_at"})
+     */
+    private $contentChangedFromIp;
 
     /**
      * @return integer
@@ -207,5 +232,35 @@ class Article
     {
         $this->createdAt = $createdAt;
         return $this;
+    }
+
+    /**
+     * Get getCreatedFromIp
+     *
+     * @return string
+     */
+    public function getCreatedFromIp(): string
+    {
+        return (string) $this->createdFromIp;
+    }
+
+    /**
+     * Get getUpdatedFromIp
+     *
+     * @return string
+     */
+    public function getUpdatedFromIp(): string
+    {
+        return (string) $this->updatedFromIp;
+    }
+
+    /**
+     * Get getContentChangedFromIp
+     *
+     * @return string
+     */
+    public function getContentChangedFromIp(): string
+    {
+        return (string) $this->contentChangedFromIp;
     }
 }
