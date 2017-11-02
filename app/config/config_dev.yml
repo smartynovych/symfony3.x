@@ -49,12 +49,3 @@ doctrine:
         user: '%database_user%'
         password: '%database_password%'
         charset: UTF8
-
-swiftmailer:
-    transport: "%mailer_transport%"
-    host:      "%mailer_host%"
-    username:  "%mailer_user%"
-    password:  "%mailer_password%"
-    auth_mode: "%mailer_auth_mode%"
-    port:      "%mailer_port%"
-    spool:     { type: memory }
