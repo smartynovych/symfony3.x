@@ -14,9 +14,11 @@ parameters:
     #database_path: '%kernel.project_dir%/var/data/data.sqlite'
 
     mailer_transport: smtp
-    mailer_host: 127.0.0.1
-    mailer_user: ~
-    mailer_password: ~
+    mailer_host: smtp.mailtrap.io
+    mailer_user: f917a1402e6632
+    mailer_password: 36def49185ef47
+    mailer_auth_mode: cram-md5
+    mailer_port: 2525
 
     # A secret key that's used to generate certain security-related tokens
     secret: ThisTokenIsNotSoSecretChangeIt

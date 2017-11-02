@@ -79,7 +79,7 @@ services:
         calls:
             - [ setAnnotationReader, [ "@annotation_reader" ] ]
 
-    gedmo.listener.iptraceable :
+    gedmo.listener.iptraceable:
         class: Gedmo\IpTraceable\IpTraceableListener
         tags:
             - { name: doctrine.event_subscriber, connection: default }

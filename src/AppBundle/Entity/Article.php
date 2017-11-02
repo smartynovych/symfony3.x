@@ -6,12 +6,15 @@ namespace AppBundle\Entity;
 
 use Gedmo\Mapping\Annotation as Gedmo;
 use Doctrine\ORM\Mapping as ORM;
+use Gedmo\IpTraceable\Traits\IpTraceableEntity;
 
 /**
  * @ORM\Entity(repositoryClass="AppBundle\Repository\ArticleRepository")
  */
 class Article
 {
+    use IpTraceableEntity;
+
     /**
      * @ORM\Column(type="integer")
      * @ORM\Id
@@ -53,22 +56,6 @@ class Article
      * @ORM\Column(type="datetime", name="created_at")
      */
     private $createdAt;
-
-    /**
-     * @var string $createdFromIp
-     *
-     * @Gedmo\IpTraceable(on="create")
-     * @ORM\Column(type="string", length=45, nullable=true)
-     */
-    private $createdFromIp;
-
-    /**
-     * @var string $updatedFromIp
-     *
-     * @Gedmo\IpTraceable(on="update")
-     * @ORM\Column(type="string", length=45, nullable=true)
-     */
-    private $updatedFromIp;
 
     /**
      * @var datetime $contentChangedFromIp
@@ -232,26 +219,6 @@ class Article
     {
         $this->createdAt = $createdAt;
         return $this;
-    }
-
-    /**
-     * Get getCreatedFromIp
-     *
-     * @return string
-     */
-    public function getCreatedFromIp(): string
-    {
-        return (string) $this->createdFromIp;
-    }
-
-    /**
-     * Get getUpdatedFromIp
-     *
-     * @return string
-     */
-    public function getUpdatedFromIp(): string
-    {
-        return (string) $this->updatedFromIp;
     }
 
     /**
