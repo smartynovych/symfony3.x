@@ -17,3 +17,13 @@ logout:
 user_registration:
     path:     /signup
     defaults: { _controller: AppBundle:Registration:signup }
+
+app_comment:
+    resource: 'routing/api.yml'
+    prefix: /api
+
+app_parser:
+    resource: |
+        alias: app.parser
+    type: sylius.resource_api
+    prefix: /api

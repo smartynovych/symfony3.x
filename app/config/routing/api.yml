@@ -1,0 +1,2 @@
+app_api_comment:
+    resource: 'api/comment.yml'

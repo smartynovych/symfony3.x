@@ -6,13 +6,14 @@ namespace ParserBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Timestampable\Traits\TimestampableEntity;
+use Sylius\Component\Resource\Model\ResourceInterface;
 
 /**
  * ParserClass
  *
  * @ORM\Entity
  */
-class ParserClass
+class ParserClass implements ResourceInterface
 {
     use TimestampableEntity;
 

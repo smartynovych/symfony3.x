@@ -1,0 +1,14 @@
+app_api_comment:
+    resource: |
+        alias: app.comment
+        section: api
+        templates: SyliusAdminBundle:Crud
+        except: ['show']
+        redirect: update
+        grid: app_api_comment
+        vars:
+            all:
+                subheader: app.ui.supplier # define a translation key for your entity subheader
+            index:
+                icon: 'file image outline' # choose an icon that will be displayed next to the subheader
+    type: sylius.resource
